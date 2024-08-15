@@ -1,6 +1,12 @@
 import express from 'express'
-import bcypt from 'bcryptjs'
 import admin from 'firebase-admin'
+import bcypt from 'bcryptjs'
+import serviceAccount from '../config/firebaseServiceAccount.json' with {type: "json"}
+
+//Initialize firebase
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount)
+})
 
 const router = express.Router()
 const db = admin.firestore()
@@ -21,5 +27,13 @@ router.post('/create', async (req,res) => {
             error: 'el correo ya existe'
         })
     }
+    const passHashed = await bcrypt.hash(password,10)
+    await estudiantesColleccion.add({
+        nombre, apaterno, amaterno, direccion, telefono, correo, password: passHashed
+    })
+    res.status(201).json({
+        message: 'success'
+    })
 })
 
+export default router 

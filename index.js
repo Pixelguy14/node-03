@@ -8,7 +8,7 @@ app.use(bodyParser.json())
 
 app.use('api/estudiantes',estudiantesRoutes)
 
-const PORT = process.env.PORT || 4000
+const PORT = process.env.PORT || 4010
 
 app.listen(PORT, () => {
     console.log(`Escuchando el puerto: ${PORT}`)

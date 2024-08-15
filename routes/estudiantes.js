@@ -1,6 +1,6 @@
 import express from 'express'
 import admin from 'firebase-admin'
-import bcypt from 'bcryptjs'
+import bcrypt from 'bcryptjs'
 import serviceAccount from '../config/firebaseServiceAccount.json' with {type: "json"}
 
 //Initialize firebase
@@ -22,7 +22,7 @@ router.post('/create', async (req,res) => {
             error: 'el usuario ya existe'
         })
     }
-    if(!correo.empty){
+    if(!findCorreo.empty){
         return res.status(400).json({
             error: 'el correo ya existe'
         })

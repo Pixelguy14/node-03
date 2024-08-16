@@ -10,7 +10,7 @@ admin.initializeApp({
 
 const router = express.Router()
 const db = admin.firestore()
-const estudiantesColleccion = db.collection('estudiantes')
+const estudiantesColleccion = db.collection("estudiantes")
 
 router.post('/create', async (req,res) => {
     const {nombre, apaterno, amaterno, direccion, telefono, correo, usuario, password} = req.body
@@ -19,17 +19,18 @@ router.post('/create', async (req,res) => {
     const findCorreo = await estudiantesColleccion.where('correo', '==', correo).get()
     if(!findUsuario.empty){
         return res.status(400).json({
-            error: 'el usuario ya existe'
+            error: 'User already exists'
         })
     }
+    
     if(!findCorreo.empty){
         return res.status(400).json({
-            error: 'el correo ya existe'
+            error: 'Mail direction already being in use'
         })
     }
     const passHashed = await bcrypt.hash(password,10)
     await estudiantesColleccion.add({
-        nombre, apaterno, amaterno, direccion, telefono, correo, password: passHashed
+        nombre, apaterno, amaterno, direccion, telefono, correo, usuario, password: passHashed
     })
     res.status(201).json({
         message: 'success'

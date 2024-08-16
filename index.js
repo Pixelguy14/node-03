@@ -6,9 +6,10 @@ import estudiantesRoutes from './routes/estudiantes.js'
 const app = express()
 app.use(bodyParser.json())
 
-app.use('api/estudiantes',estudiantesRoutes)
+//Route management
+app.use('/api/estudiantes',estudiantesRoutes)
 
-const PORT = process.env.PORT || 4010
+const PORT = process.env.PORT || 3010
 
 app.listen(PORT, () => {
     console.log(`Escuchando el puerto: ${PORT}`)

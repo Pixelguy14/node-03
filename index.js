@@ -6,6 +6,7 @@ import estudiantesRoutes from './routes/estudiantes.js'
 const app = express()
 app.use(bodyParser.json())
 
+
 //Route management
 app.use('/api/estudiantes',estudiantesRoutes)
 

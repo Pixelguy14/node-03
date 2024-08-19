@@ -6,7 +6,7 @@ import estudiantesRoutes from './routes/estudiantes.js'
 const app = express()
 app.use(bodyParser.json())
 
-app.use('api/estudiantes',estudiantesRoutes)
+app.use('/api/estudiantes',estudiantesRoutes)
 
 const PORT = process.env.PORT || 4010
 

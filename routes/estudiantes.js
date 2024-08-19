@@ -29,7 +29,7 @@ function authenticateToken(req, res, next){
 
 const router = express.Router()
 const db = admin.firestore()
-const estudiantesColleccion = db.collection('estudiantes')
+const estudiantesColleccion = db.collection("estudiantes")
 
 //Create User //we add auth to the function because once creating an user you should have a token
 router.post('/create', /*authenticateToken,*/ async (req,res) => {
@@ -42,9 +42,10 @@ router.post('/create', /*authenticateToken,*/ async (req,res) => {
             error: 'el nombre de usuario ya existe'
         })
     }
+    
     if(!findCorreo.empty){
         return res.status(400).json({
-            error: 'el correo ya existe'
+            error: 'Mail direction already being in use'
         })
     }
     const passHashed = await bcrypt.hash(password,10)

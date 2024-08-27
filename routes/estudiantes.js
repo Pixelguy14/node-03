@@ -58,7 +58,7 @@ router.post('/login', async (req,res) => {
 })
 
 //Create User //we add auth to the function because once creating an user you should have a token
-router.post('/create', authenticateToken, async (req,res) => {
+router.post('/create', /*authenticateToken,*/ async (req,res) => {
     const {nombre, apaterno, amaterno, direccion, telefono, correo, usuario, password} = req.body
     // Validar correo y usuario
     const findUsuario = await estudiantesColleccion.where('usuario', '==', usuario).get()

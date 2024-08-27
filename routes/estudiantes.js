@@ -29,10 +29,36 @@ function authenticateToken(req, res, next){
 
 const router = express.Router()
 const db = admin.firestore()
-const estudiantesColleccion = db.collection("estudiantes")
+const estudiantesColleccion = db.collection('estudiantes')
+
+
+//Login Route
+router.post('/login', async (req,res) => {
+    const {usuario, password} = req.body
+    const findUsuario = await estudiantesColleccion.where('usuario', '==', usuario).get()
+    if (findUsuario.empty){
+        return res.status(400).json({
+            error: 'El usuario no existe'
+        })
+    }
+    const userDoc = findUsuario.docs[0]
+    const user = userDoc.data()
+
+    const validarPassword = await bcrypt.compare(password, user.password)
+    if (!validarPassword){
+        return res.status(400).json({
+            error: 'Contraseña incorecta'
+        })
+    }
+    const token = generateToken({id: userDoc.id, usuario: user.usuario})
+
+    res.status(201).json({
+        token
+    })
+})
 
 //Create User //we add auth to the function because once creating an user you should have a token
-router.post('/create', /*authenticateToken,*/ async (req,res) => {
+router.post('/create', authenticateToken, async (req,res) => {
     const {nombre, apaterno, amaterno, direccion, telefono, correo, usuario, password} = req.body
     // Validar correo y usuario
     const findUsuario = await estudiantesColleccion.where('usuario', '==', usuario).get()
@@ -42,10 +68,9 @@ router.post('/create', /*authenticateToken,*/ async (req,res) => {
             error: 'el nombre de usuario ya existe'
         })
     }
-    
     if(!findCorreo.empty){
         return res.status(400).json({
-            error: 'Mail direction already being in use'
+            error: 'el correo ya existe'
         })
     }
     const passHashed = await bcrypt.hash(password,10)
@@ -58,7 +83,7 @@ router.post('/create', /*authenticateToken,*/ async (req,res) => {
 })
 
 //Get all
-router.get('/all', async(req, res)=>{
+router.get('/all', authenticateToken, async(req, res)=>{
     const colEstudiantes = await estudiantesColleccion.get()
     const estudiantes = colEstudiantes.docs.map((doc)=>({
         id: doc.id,

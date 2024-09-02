@@ -58,7 +58,7 @@ router.post('/login', async (req,res) => {
 })
 
 //Create User //we add auth to the function because once creating an user you should have a token
-router.post('/create', /*authenticateToken,*/ async (req,res) => {
+router.post('/create', authenticateToken, async (req,res) => {
     const {nombre, apaterno, amaterno, direccion, telefono, correo, usuario, password} = req.body
     // Validar correo y usuario
     const findUsuario = await estudiantesColleccion.where('usuario', '==', usuario).get()
@@ -96,7 +96,7 @@ router.get('/all', authenticateToken, async(req, res)=>{
 })
 
 //Get one
-router.get('/estudiante/:id', async(req, res)=>{
+router.get('/estudiante/:id', authenticateToken, async(req, res)=>{
     const id = req.params.id
     const colEstudiantes = await estudiantesColleccion.doc(id).get()
     if(!colEstudiantes.exists){
@@ -116,7 +116,7 @@ router.get('/estudiante/:id', async(req, res)=>{
 //add update and delete //later add token to both functions
 
 //delete an estudiante
-router.delete('/estudiante/:id', async (req, res) => {
+router.delete('/estudiante/:id', authenticateToken, async (req, res) => {
     const id = req.params.id
     const colEstudiantes = await estudiantesColleccion.doc(id).get()
     if (!colEstudiantes.exists) {
@@ -131,7 +131,7 @@ router.delete('/estudiante/:id', async (req, res) => {
 })
 
 //update an estudiante
-router.put('/estudiante/:id', async (req, res) => {
+router.put('/estudiante/:id', authenticateToken, async (req, res) => {
     const id = req.params.id
     const {nombre, apaterno, amaterno, direccion, telefono, correo, usuario, password} = req.body
     const colEstudiantes = await estudiantesColleccion.doc(id).get()

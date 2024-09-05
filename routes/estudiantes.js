@@ -141,6 +141,7 @@ router.put('/estudiante/:id', authenticateToken, async (req, res) => {
         })
     }
     // Validar correo y usuario
+    /*
     const findUsuario = await estudiantesColleccion.where('usuario', '==', usuario).get()
     const findCorreo = await estudiantesColleccion.where('correo', '==', correo).get()
     if(!findUsuario.empty){
@@ -153,12 +154,13 @@ router.put('/estudiante/:id', authenticateToken, async (req, res) => {
             error: 'el correo ya existe'
         })
     }
+    */
     const passHashed = await bcrypt.hash(password,10)
     await estudiantesColleccion.doc(id).update({
         nombre, apaterno, amaterno, direccion, telefono, correo, usuario, password: passHashed
     })
     res.status(200).json({
-        message: 'Estudiante actualizado con éxito'
+        message: 'success'
     })
 })
 
